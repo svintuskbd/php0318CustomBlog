@@ -1,4 +1,3 @@
-<?php viewTitle(); ?>
 
 <hr>
 <!-- Footer -->
