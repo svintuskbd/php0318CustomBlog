@@ -1,4 +1,5 @@
 <?php
+session_start();
 function viewTitle()
 {
     $arr = explode('.', $_SERVER['REQUEST_URI']);
@@ -128,4 +129,55 @@ function deleteArticle($id)
     }
 
     return false;
+}
+
+function insertUser($userData)
+{
+    $db = connectDb();
+    if ($db) {
+        $password = md5($userData['password']);
+        $sql = "INSERT INTO users(name, last_name, login, email, password)
+              VALUES ( :name,  :lastName, :login, :email, :password)";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':name', $userData['firstName'], PDO::PARAM_STR);
+        $stmt->bindParam(':lastName', $userData['lastName'], PDO::PARAM_STR);
+        $stmt->bindParam(':login', $userData['login'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $userData['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    }
+}
+
+function registerUser(array $userData)
+{
+    if ($userData['password'] !== $userData['passwordConfirm']) {
+        $_SESSION['error_message'] = 'Inputted passwords not confirm!';
+        return;
+    }
+
+    if (!isset($userData['login']) || empty($userData['login'])) {
+        $_SESSION['error_message'] = 'Login can not be empty!';
+        return;
+    }
+
+    if (!isset($userData['email']) || empty($userData['email'])) {
+        $_SESSION['error_message'] = 'Email can not be empty!';
+        return;
+    }
+
+    //TODO validation data before send to DB
+
+    if (insertUser($userData)) {
+        $_SESSION['error_message'] = false;
+    } else {
+        $_SESSION['error_message'] = 'Register user not complete';
+    }
+}
+
+function getErrorMessage()
+{
+    return isset($_SESSION['error_message']) ? $_SESSION['error_message'] : false;
 }
