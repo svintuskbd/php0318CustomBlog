@@ -63,25 +63,16 @@ function getArticles()
         return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-//    if ($db) {
-//        $sql = "SELECT articles.*, user.name
-//                FROM article
-//                LEFT JOIN users ON users.id=author";
-//
-//        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-//    }
-
     return false;
 }
 
-function getAuthor($id)
+function getAuthor($login)
 {
     $db = connectDb();
     if ($db) {
         $sql = "SELECT *
                 FROM users
-                WHERE id=$id
+                WHERE login='$login'
                 ";
 
         return $db->query($sql)->fetch(PDO::FETCH_ASSOC);
@@ -90,19 +81,109 @@ function getAuthor($id)
     return false;
 }
 
-function insertArticle($title, $text)
+function insertArticle($userData)
 {
     $db = connectDb();
     if ($db) {
-        $sql = "INSERT INTO article(title, content) VALUES ( :title,  :content)";
+        $authorId = null;
+        if ($_SESSION['user_login']) {
+            $authorId = getAuthor($_SESSION['user_login']);
+        } else {
+            return;
+        }
+
+        $sql = "INSERT INTO articles(title, sub_title, content, created_at, author, url)
+                  VALUES ( :title, :subTitle,  :content, :createdAt, :authorId, :url)";
 
         $stmt = $db->prepare($sql);
 
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':content', $text, PDO::PARAM_STR);
+        $datetime = new DateTime();
+        $createdAt = $datetime->format('Y-m-d H:i:s');
 
-        $stmt->execute();
+
+
+        $url = getUrl($userData['title']);
+
+        $stmt->bindParam(':title', $userData['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':subTitle', $userData['sub_title'], PDO::PARAM_STR);
+        $stmt->bindParam(':content', $userData['content'], PDO::PARAM_STR);
+        $stmt->bindParam(':createdAt', $createdAt, PDO::PARAM_STR);
+        $stmt->bindParam(':authorId', $authorId, PDO::PARAM_STR);
+        $stmt->bindParam(':url', $url, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            header('Location: /admin/articles.php');
+        }
     }
+}
+
+function getUrl($str)
+{
+    $articleUrl = str_replace(' ', '-', $str);
+    $articleUrl = transliteration($articleUrl);
+    $articleIsset = getArticleByUrl($articleUrl);
+    if (!$articleIsset) {
+        return $articleUrl;
+    } else {
+        $url = $articleIsset['url'];
+        $exUrl = explode('-', $url);
+        if ($exUrl){
+            $temp = (int)end($exUrl);
+            $newUrl = $exUrl[0] . '-'. ++$temp;
+        } else {
+            $temp = 0;
+            $newUrl = $articleUrl . '-'. ++$temp;
+        }
+
+        return getUrl($newUrl);
+    }
+}
+
+function transliteration($str)
+{
+    $st = strtr($str,
+        array(
+            'а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d',
+            'е'=>'e','ё'=>'e','ж'=>'zh','з'=>'z','и'=>'i',
+            'к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o',
+            'п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u',
+            'ф'=>'ph','х'=>'h','ы'=>'y','э'=>'e','ь'=>'',
+            'ъ'=>'','й'=>'y','ц'=>'c','ч'=>'ch', 'ш'=>'sh',
+            'щ'=>'sh','ю'=>'yu','я'=>'ya',' '=>'_', '<'=>'_',
+            '>'=>'_', '?'=>'_', '"'=>'_', '='=>'_', '/'=>'_',
+            '|'=>'_'
+        )
+    );
+    $st2 = strtr($st,
+        array(
+            'А'=>'a','Б'=>'b','В'=>'v','Г'=>'g','Д'=>'d',
+            'Е'=>'e','Ё'=>'e','Ж'=>'zh','З'=>'z','И'=>'i',
+            'К'=>'k','Л'=>'l','М'=>'m','Н'=>'n','О'=>'o',
+            'П'=>'p','Р'=>'r','С'=>'s','Т'=>'t','У'=>'u',
+            'Ф'=>'ph','Х'=>'h','Ы'=>'y','Э'=>'e','Ь'=>'',
+            'Ъ'=>'','Й'=>'y','Ц'=>'c','Ч'=>'ch', 'Ш'=>'sh',
+            'Щ'=>'sh','Ю'=>'yu','Я'=>'ya'
+        )
+    );
+    $translit = $st2;
+
+    return $translit;
+}
+
+
+function getArticleByUrl($str)
+{
+    $db = connectDb();
+    if ($db) {
+        $sql = "SELECT *
+                FROM articles
+                WHERE url='$str'
+                ";
+
+        return $db->query($sql)->fetch(PDO::FETCH_ASSOC);
+    }
+
+    return false;
 }
 
 function updateArticle($article, $id)
