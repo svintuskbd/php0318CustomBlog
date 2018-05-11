@@ -375,10 +375,10 @@
           );
 
           $controlGroup.data(
-            "original-classes",
+            "original-Classes",
             (
               $controlGroup.data("original-clases") ?
-              $controlGroup.data("original-classes") :
+              $controlGroup.data("original-Classes") :
               $controlGroup.attr("class")
             )
           );
@@ -517,8 +517,8 @@
             $this.unbind('.validation'); // events are namespaced.
             // reset help text
             $helpBlock.html($helpBlock.data("original-contents"));
-            // reset classes
-            $controlGroup.attr("class", $controlGroup.data("original-classes"));
+            // reset Classes
+            $controlGroup.attr("class", $controlGroup.data("original-Classes"));
             // reset aria
             $this.attr("aria-invalid", $this.data("original-aria-invalid"));
             // reset role

@@ -1110,7 +1110,7 @@
 				];
 			}
 			
-			/* Remove row stripe classes if they are already on the table row */
+			/* Remove row stripe Classes if they are already on the table row */
 			var stripeClasses = oSettings.asStripeClasses;
 			var rowOne = $this.children('tbody').find('tr').eq(0);
 			if ( $.inArray( true, $.map( stripeClasses, function(el, i) {
@@ -1203,8 +1203,8 @@
 					}
 				}
 			
-				/* Do a first pass on the sorting classes (allows any size changes to be taken into
-				 * account, and also will apply sorting disabled classes if disabled
+				/* Do a first pass on the sorting Classes (allows any size changes to be taken into
+				 * account, and also will apply sorting disabled Classes if disabled
 				 */
 				_fnSortingClasses( oSettings );
 			
@@ -1975,7 +1975,7 @@
 		var searchCols = oSettings.aoPreSearchCols;
 		searchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch, searchCols[ iCol ] );
 	
-		// Use the default column options function to initialise classes etc
+		// Use the default column options function to initialise Classes etc
 		_fnColumnOptions( oSettings, iCol, $(nTh).data() );
 	}
 	
@@ -3157,7 +3157,7 @@
 			}
 	
 			if ( data.DT_RowClass ) {
-				// Remove any classes added by DT_RowClass before
+				// Remove any Classes added by DT_RowClass before
 				var a = data.DT_RowClass.split(' ');
 				row.__rowc = row.__rowc ?
 					_unique( row.__rowc.concat( a ) ) :
@@ -3234,7 +3234,7 @@
 		/* ARIA role for the rows */
 	 	$(thead).find('>tr').attr('role', 'row');
 	
-		/* Deal with the footer - add classes if required */
+		/* Deal with the footer - add Classes if required */
 		$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
 		$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 	
@@ -3438,7 +3438,7 @@
 	
 				var nRow = aoData.nTr;
 	
-				/* Remove the old striping classes and then add the new one */
+				/* Remove the old striping Classes and then add the new one */
 				if ( iStripes !== 0 )
 				{
 					var sStripe = asStripeClasses[ iRowCount % iStripes ];
@@ -6198,7 +6198,7 @@
 	
 	
 	/**
-	 * Set the sorting classes on table's body, Note: it is safe to call this function
+	 * Set the sorting Classes on table's body, Note: it is safe to call this function
 	 * when bSort and bSortClasses are false
 	 *  @param {object} oSettings dataTables settings object
 	 *  @memberof DataTable#oApi
@@ -6212,7 +6212,7 @@
 		var i, ien, colIdx;
 	
 		if ( features.bSort && features.bSortClasses ) {
-			// Remove old sorting classes
+			// Remove old sorting Classes
 			for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
 				colIdx = oldSort[i].src;
 	
@@ -9319,7 +9319,7 @@
 			jqTbody.children().detach();
 			jqTbody.append( rows );
 	
-			// Remove the DataTables generated nodes, events and classes
+			// Remove the DataTables generated nodes, events and Classes
 			var removedMethod = remove ? 'remove' : 'detach';
 			jqTable[ removedMethod ]();
 			jqWrapper[ removedMethod ]();
@@ -9335,9 +9335,9 @@
 					.css( 'width', settings.sDestroyWidth )
 					.removeClass( classes.sTable );
 	
-				// If the were originally stripe classes - then we add them back here.
+				// If the were originally stripe Classes - then we add them back here.
 				// Note this is not fool proof (for example if not all rows had stripe
-				// classes - but it's a good effort without getting carried away
+				// Classes - but it's a good effort without getting carried away
 				ien = settings.asDestroyStripes.length;
 	
 				if ( ien ) {
@@ -10206,7 +10206,7 @@
 	
 	
 		/**
-		 * An array of CSS classes that should be applied to displayed rows. This
+		 * An array of CSS Classes that should be applied to displayed rows. This
 		 * array may be of any length, and DataTables will apply each class
 		 * sequentially, looping when required.
 		 *  @type array
@@ -10543,10 +10543,10 @@
 	
 	
 		/**
-		 * Enable or disable the addition of the classes `sorting\_1`, `sorting\_2` and
+		 * Enable or disable the addition of the Classes `sorting\_1`, `sorting\_2` and
 		 * `sorting\_3` to the columns which are currently being sorted on. This is
 		 * presented as a feature switch as it can increase processing time (while
-		 * classes are removed and added) so for large data sets you might want to
+		 * Classes are removed and added) so for large data sets you might want to
 		 * turn this off.
 		 *  @type boolean
 		 *  @default true
@@ -10592,7 +10592,7 @@
 		/**
 		 * This function is called when a TR element is created (and all TD child
 		 * elements have been inserted), or registered if using a DOM source, allowing
-		 * manipulation of the TR element (adding classes etc).
+		 * manipulation of the TR element (adding Classes etc).
 		 *  @type function
 		 *  @param {node} row "TR" element for the current row
 		 *  @param {array} data Raw data array for this row
@@ -11192,7 +11192,7 @@
 	
 		/**
 		 * Classes that DataTables assigns to the various components and features
-		 * that it adds to the HTML table. This allows classes to be configured
+		 * that it adds to the HTML table. This allows Classes to be configured
 		 * during initialisation in addition to through the static
 		 * {@link DataTable.ext.oStdClasses} object).
 		 *  @namespace
@@ -11801,8 +11801,8 @@
 		 *     </li>
 		 *     <li>The following constants are allowed:
 		 *       <ul>
-		 *         <li>'H' - jQueryUI theme "header" classes ('fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix')</li>
-		 *         <li>'F' - jQueryUI theme "footer" classes ('fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix')</li>
+		 *         <li>'H' - jQueryUI theme "header" Classes ('fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix')</li>
+		 *         <li>'F' - jQueryUI theme "footer" Classes ('fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix')</li>
 		 *       </ul>
 		 *     </li>
 		 *     <li>The following syntax is expected:
@@ -13240,7 +13240,7 @@
 		"asStripeClasses": null,
 	
 		/**
-		 * If restoring a table - we should restore its striping classes as well
+		 * If restoring a table - we should restore its striping Classes as well
 		 *  @type array
 		 *  @default []
 		 */
@@ -13622,7 +13622,7 @@
 		"_iRecordsDisplay": 0,
 	
 		/**
-		 * The classes to use for the table
+		 * The Classes to use for the table
 		 *  @type object
 		 *  @default {}
 		 */
@@ -14343,7 +14343,7 @@
 		"sPageButtonActive": "current",
 		"sPageButtonDisabled": "disabled",
 	
-		/* Striping classes */
+		/* Striping Classes */
 		"sStripeOdd": "odd",
 		"sStripeEven": "even",
 	

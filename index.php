@@ -18,21 +18,22 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <?php if (getArticles()): ?>
-                    <?php foreach (getArticles() as $article): ?>
-                    <?php $author = getAuthor($article['author']); ?>
+                <?php $articles = $articleManager->getArticles(); ?>
+                <?php if ($articles): ?>
+                    <?php foreach ($articles as $article): ?>
+                    <?php $author = $articleManager->getAuthor($article->author); ?>
                         <div class="post-preview">
                             <a href="post.html">
                                 <h2 class="post-title">
-                                    <?= $article['title']; ?>
+                                    <?= $article->title; ?>
                                 </h2>
                                 <h3 class="post-subtitle">
-                                    <?= $article['sub_title']; ?>
+                                    <?= $article->sub_title; ?>
                                 </h3>
                             </a>
                             <p class="post-meta">Posted by
-                                <a href="#"><?= $author['login']; ?></a>
-                                <?php $date = DateTime::createFromFormat('Y-m-d H:i:s', $article['created_at']); ?>
+                                <a href="#"><?= $author->login; ?></a>
+                                <?php $date = DateTime::createFromFormat('Y-m-d H:i:s', $article->created_at); ?>
                                 on <?= $date->format('F d, Y'); ?></p>
                         </div>
                     <hr>

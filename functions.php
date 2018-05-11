@@ -1,5 +1,56 @@
 <?php
+
+use Classes\Article;
+use Classes\ConnectDb;
+
 session_start();
+
+spl_autoload_register(function ($class) {
+
+    // project-specific namespace prefix
+    $prefix = 'Classes\\';
+
+    // base directory for the namespace prefix
+    $base_dir = __DIR__ . '/Classes/';
+
+    // does the class use the namespace prefix?
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        // no, move to the next registered autoloader
+        return;
+    }
+
+    // get the relative class name
+    $relative_class = substr($class, $len);
+
+    // replace the namespace prefix with the base directory, replace namespace
+    // separators with directory separators in the relative class name, append
+    // with .php
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+
+    // if the file exists, require it
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
+
+$connect = new ConnectDb(
+    'localhost',
+    'custom_blog',
+    'root',
+    '19888813'
+);
+
+
+$articleManager = new Article($connect->getConnect());
+
+
+
+
+
+
+
 function viewTitle()
 {
     $arr = explode('.', $_SERVER['REQUEST_URI']);
@@ -39,47 +90,11 @@ function viewTitle()
 //    }
 }
 
-function connectDb()
-{
-    try {
-        $dbh = new PDO('mysql:host=localhost;dbname=custom_blog', 'root', '19888813');
 
-        return $dbh;
-    } catch (PDOException $e) {
-        print "Error!: " . $e->getMessage() . "<br/>";
 
-        return false;
-    }
-}
 
-function getArticles()
-{
-    $db = connectDb();
-    if ($db) {
-        $sql = "SELECT *
-                FROM articles
-                ";
 
-        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
 
-    return false;
-}
-
-function getAuthor($login)
-{
-    $db = connectDb();
-    if ($db) {
-        $sql = "SELECT *
-                FROM users
-                WHERE login='$login'
-                ";
-
-        return $db->query($sql)->fetch(PDO::FETCH_ASSOC);
-    }
-
-    return false;
-}
 
 function insertArticle($userData)
 {
