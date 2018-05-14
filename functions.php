@@ -35,15 +35,7 @@ spl_autoload_register(function ($class) {
 });
 
 
-$connect = new ConnectDb(
-    'localhost',
-    'custom_blog',
-    'root',
-    '19888813'
-);
-
-
-$articleManager = new Article($connect->getConnect());
+$articleManager = new Article(ConnectDb::getConnect());
 
 
 

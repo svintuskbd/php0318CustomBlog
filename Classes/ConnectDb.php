@@ -3,73 +3,32 @@
 namespace Classes;
 
 use PDO;
-use PDOException;
 
-class ConnectDb
+
+abstract class ConnectDb
 {
-    /**
-     * @var string $host
-     */
-    private $host;
+    const HOST = 'localhost';
+    const DB_NAME = 'custom_blog';
+    const USER = 'root';
+    const PASSWORD = '19888813';
 
-    /**
-     * @var string $dbName
-     */
-    private $dbName;
-
-    /**
-     * @var string $user
-     */
-    private $user;
-
-    /**
-     * @var string $password
-     */
-    private $password;
-
-    /**
-     * @var PDO $dbh ;
-     */
-    private $dbh;
-
-    /**
-     * ConnectDb constructor.
-     *
-     * @param string $host
-     * @param string $dbName
-     * @param string $user
-     * @param string $password
-     */
-    public function __construct($host, $dbName, $user, $password)
+    public static function getConnect()
     {
-        $this->host = $host;
-        $this->dbName = $dbName;
-        $this->user = $user;
-        $this->password = $password;
-    }
-
-    public function getConnect()
-    {
-        if (!$this->dbh) {
-            $this->connectDb();
-            $this->getConnect();
+        if (!self::connectDb()) {
+            self::connectDb();
+            self::getConnect();
         }
 
-        return $this->dbh;
+        return self::connectDb();
     }
 
-    public function __toString()
+    private static function connectDb()
     {
-        return 'Connect DB';
-    }
-
-    private function connectDb()
-    {
-        $this->dbh = new PDO(
-            'mysql:host=' . $this->host . ';
-            dbname=' . $this->dbName,
-            $this->user,
-            $this->password
+        return new PDO(
+            'mysql:host=' . self::HOST . ';
+            dbname=' . self::DB_NAME,
+            self::USER,
+            self::PASSWORD
         );
     }
 }
